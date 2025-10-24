@@ -55,7 +55,6 @@ st.markdown(f"""
   max-width: 1400px;
 }}
 
-/* ===== HERO SECTION ===== */
 .hero-container {{
   margin-bottom: 3rem;
   position: relative;
@@ -113,7 +112,6 @@ h1.hero-title {{
   max-width: 600px;
 }}
 
-/* ===== GLASS CARD SYSTEM ===== */
 .glass-card {{
   background: linear-gradient(135deg, 
     rgba(255,255,255,0.08) 0%, 
@@ -151,7 +149,6 @@ h1.hero-title {{
     inset 0 1px 0 rgba(255,255,255,0.15);
 }}
 
-/* ===== MEGA KPI CARDS (3 CARTES) ===== */
 .kpi-grid {{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -237,7 +234,6 @@ h1.hero-title {{
   filter: drop-shadow(0 0 8px rgba(193,165,236,0.4));
 }}
 
-/* ===== BLOCKCHAIN COUNTER SECTION ===== */
 .blockchain-counter {{
   text-align: center;
   margin: 2.5rem 0;
@@ -269,7 +265,6 @@ h1.hero-title {{
   letter-spacing: -0.02em;
 }}
 
-/* ===== CHAIN BADGE ===== */
 .chain-badges {{
   display: flex;
   flex-wrap: wrap;
@@ -324,7 +319,6 @@ h1.hero-title {{
   font-weight: 500;
 }}
 
-/* ===== FORM STYLING ===== */
 .stTextInput > div > div > input,
 .stDateInput > div > div > input {{
   background: rgba(255,255,255,0.08) !important;
@@ -353,7 +347,6 @@ h1.hero-title {{
   letter-spacing: 0.5px !important;
 }}
 
-/* ===== BUTTON STYLING ===== */
 .stButton > button,
 .stDownloadButton > button {{
   background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
@@ -394,7 +387,6 @@ h1.hero-title {{
   left: 100%;
 }}
 
-/* ===== TABS STYLING ===== */
 .stTabs [data-baseweb="tab-list"] {{
   gap: 1rem;
   background: rgba(255,255,255,0.03);
@@ -418,7 +410,6 @@ h1.hero-title {{
   box-shadow: 0 4px 16px rgba(193,165,236,0.3);
 }}
 
-/* ===== CHART CONTAINER ===== */
 .chart-container {{
   background: linear-gradient(135deg, 
     rgba(255,255,255,0.04) 0%, 
@@ -430,7 +421,6 @@ h1.hero-title {{
   backdrop-filter: blur(10px);
 }}
 
-/* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar {{
   width: 10px;
   height: 10px;
@@ -449,12 +439,10 @@ h1.hero-title {{
   background: linear-gradient(180deg, {ACCENT}, {PRIMARY});
 }}
 
-/* ===== SPINNER ===== */
 .stSpinner > div {{
   border-top-color: {PRIMARY} !important;
 }}
 
-/* ===== INFO CARDS ===== */
 .info-card {{
   background: linear-gradient(135deg, 
     rgba(193,165,236,0.08) 0%, 
@@ -467,7 +455,6 @@ h1.hero-title {{
   backdrop-filter: blur(10px);
 }}
 
-/* ===== HIDE DEFAULTS ===== */
 header[data-testid="stHeader"] {{
   background: transparent;
 }}
@@ -503,7 +490,8 @@ with st.container():
         
         with col1:
             wallet = st.text_input(
-                "Wallet Address", 
+                "Wallet Address (EVM)", 
+                value="",
                 placeholder="0x...",
                 help="Enter any EVM-compatible wallet address"
             )
@@ -558,18 +546,22 @@ if submitted:
         st.warning("⚠️ No analyzable data returned")
         st.stop()
 
-    # --------- CALCUL DES BLOCKCHAINS UNIQUES ---------
+    # --------- BUILD DATAFRAME ---------
     df = pd.DataFrame(txs)
-    unique_chains = set()
     
-    if "from_chain" in df.columns:
-        unique_chains.update(df["from_chain"].dropna().unique())
-    if "to_chain" in df.columns:
-        unique_chains.update(df["to_chain"].dropna().unique())
+    # --------- TOLERANT BLOCKCHAIN EXTRACTION ---------
+    unique_chains = set()
+    for row in txs:
+        f = row.get("from_chain") or row.get("from_blockchain")
+        t = row.get("to_chain") or row.get("to_blockchain")
+        if f and str(f).strip():
+            unique_chains.add(str(f).strip())
+        if t and str(t).strip():
+            unique_chains.add(str(t).strip())
     
     num_blockchains = len(unique_chains)
 
-    # --------- MEGA KPIs (3 CARTES SEULEMENT) ---------
+    # --------- MEGA KPIs (3 CARDS) ---------
     st.markdown(f"""
     <div class="kpi-grid">
         <div class="kpi-card">
@@ -593,19 +585,19 @@ if submitted:
     # --------- BLOCKCHAIN COUNTER ---------
     st.markdown(f"""
     <div class="blockchain-counter">
-        <div class="blockchain-counter-label">⛓️ Blockchains Used</div>
-        <div class="blockchain-counter-value">{num_blockchains} blockchain{"s" if num_blockchains > 1 else ""}</div>
+        <div class="blockchain-counter-label">⛓️ Chains Used</div>
+        <div class="blockchain-counter-value">{num_blockchains} blockchain{"s" if num_blockchains != 1 else ""}</div>
     </div>
     """, unsafe_allow_html=True)
 
-    # --------- DATA PROCESSING ---------
+    # --------- DATA PROCESSING FOR CHARTS ---------
     if "timestamp" in df.columns:
         df["date"] = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert("UTC").dt.date
 
     # --------- INSIGHTS SECTION ---------
     st.markdown("### 📈 Detailed Insights")
     
-    tab1, tab2 = st.tabs(["🏢 Platform Analytics", "⛓️ Blockchains Used"])
+    tab1, tab2 = st.tabs(["🏢 Platform Analytics", "⛓️ Chains Used"])
 
     with tab1:
         platforms = None
@@ -656,22 +648,28 @@ if submitted:
             st.info("📊 Platform data unavailable")
 
     with tab2:
-        # Compter les utilisations de chaque chaîne
-        cols = [c for c in ["from_chain", "to_chain"] if c in df.columns]
-        if cols:
-            chain_counts = pd.concat([df[c] for c in cols]).value_counts().to_dict()
-            
-            # Création des badges de chaînes
+        # Count chain usages with tolerant extraction
+        chain_counts = {}
+        for row in txs:
+            f = row.get("from_chain") or row.get("from_blockchain")
+            t = row.get("to_chain") or row.get("to_blockchain")
+            if f and str(f).strip():
+                chain_name = str(f).strip()
+                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+            if t and str(t).strip():
+                chain_name = str(t).strip()
+                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+        
+        if chain_counts:
             badges_html = '<div class="chain-badges">'
             for chain, count in sorted(chain_counts.items(), key=lambda x: x[1], reverse=True):
-                # Première lettre pour l'icône
                 icon_letter = chain[0].upper() if chain else "?"
                 badges_html += f'''
                 <div class="chain-badge">
                     <div class="chain-badge-icon">{icon_letter}</div>
                     <div>
                         <div class="chain-badge-name">{chain}</div>
-                        <div class="chain-badge-count">{count} interactions</div>
+                        <div class="chain-badge-count">{count} interaction{"s" if count != 1 else ""}</div>
                     </div>
                 </div>
                 '''
@@ -688,8 +686,8 @@ if submitted:
     <div class="glass-card">
         <h4 style="margin: 0 0 1rem 0;">Download Complete Dataset</h4>
         <p style="margin: 0; color: rgba(255,255,255,0.7); line-height: 1.6;">
-            Export all transaction data in CSV format for further analysis, 
-            reporting, or integration with your existing tools.
+            Download the full CSV below — the detailed table is intentionally hidden on the page 
+            to maintain a clean, focused interface. Export for further analysis or integration with your tools.
         </p>
     </div>
     """, unsafe_allow_html=True)
