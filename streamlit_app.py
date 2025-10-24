@@ -154,7 +154,7 @@ h1.hero-title {{
 /* ===== MEGA KPI CARDS ===== */
 .kpi-grid {{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
   margin: 2.5rem 0;
 }}
@@ -225,6 +225,61 @@ h1.hero-title {{
   right: 1.5rem;
   font-size: 2rem;
   opacity: 0.15;
+}}
+
+/* ===== CHAIN BADGE ===== */
+.chain-badges {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}}
+
+.chain-badge {{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba(193,165,236,0.15), rgba(139,122,184,0.1));
+  border: 1.5px solid rgba(193,165,236,0.3);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(193,165,236,0.1);
+}}
+
+.chain-badge:hover {{
+  transform: translateY(-3px);
+  border-color: rgba(193,165,236,0.6);
+  box-shadow: 0 8px 24px rgba(193,165,236,0.25);
+  background: linear-gradient(135deg, rgba(193,165,236,0.22), rgba(139,122,184,0.15));
+}}
+
+.chain-badge-icon {{
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, {PRIMARY}, {SECONDARY});
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #FFF;
+  box-shadow: 0 4px 12px rgba(193,165,236,0.3);
+}}
+
+.chain-badge-name {{
+  font-weight: 600;
+  font-size: 1rem;
+  color: #FFFFFF;
+  letter-spacing: 0.3px;
+}}
+
+.chain-badge-count {{
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
 }}
 
 /* ===== FORM STYLING ===== */
@@ -389,7 +444,7 @@ footer {{
 st.markdown("""
 <div class="hero-container">
   <div class="badge">
-    <span>POWERED BY LI.FI</span>
+    <span>BUILT BY CURTIS_XBT</span>
   </div>
   <h1 class="hero-title">Jumper Analytics</h1>
   <div class="hero-subtitle">
@@ -407,7 +462,7 @@ with st.container():
         with col1:
             wallet = st.text_input(
                 "Wallet Address", 
-                placeholder="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb...",
+                placeholder="0x...",
                 help="Enter any EVM-compatible wallet address"
             )
         
@@ -461,7 +516,18 @@ if submitted:
         st.warning("⚠️ No analyzable data returned")
         st.stop()
 
-    # --------- MEGA KPIs ---------
+    # --------- CALCUL DES BLOCKCHAINS UNIQUES ---------
+    df = pd.DataFrame(txs)
+    unique_chains = set()
+    
+    if "from_chain" in df.columns:
+        unique_chains.update(df["from_chain"].dropna().unique())
+    if "to_chain" in df.columns:
+        unique_chains.update(df["to_chain"].dropna().unique())
+    
+    num_blockchains = len(unique_chains)
+
+    # --------- MEGA KPIs (4 maintenant) ---------
     st.markdown(f"""
     <div class="kpi-grid">
         <div class="kpi-card">
@@ -479,62 +545,24 @@ if submitted:
             <div class="kpi-label">Swap Volume</div>
             <div class="kpi-value">${analyzer.swap_value:,.0f}</div>
         </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">⛓️</div>
+            <div class="kpi-label">Blockchains</div>
+            <div class="kpi-value">{num_blockchains}</div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
     # --------- DATA PROCESSING ---------
-    df = pd.DataFrame(txs)
     if "timestamp" in df.columns:
         df["date"] = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert("UTC").dt.date
 
     # --------- INSIGHTS SECTION ---------
     st.markdown("### 📈 Detailed Insights")
     
-    tab1, tab2, tab3 = st.tabs(["💰 Volume Trends", "🏢 Platform Analytics", "⛓️ Chain Distribution"])
+    tab1, tab2 = st.tabs(["🏢 Platform Analytics", "⛓️ Blockchains Used"])
 
     with tab1:
-        if "date" in df.columns and "usd" in df.columns:
-            daily = df.groupby("date")["usd"].sum().reset_index().sort_values("date")
-            
-            fig = px.area(
-                daily, 
-                x="date", 
-                y="usd",
-                labels={"usd": "Volume (USD)", "date": "Date"}
-            )
-            
-            fig.update_traces(
-                line_color=PRIMARY,
-                fillcolor=f"rgba(193,165,236,0.2)",
-                hovertemplate="<b>%{x}</b><br>$%{y:,.2f}<extra></extra>"
-            )
-            
-            fig.update_layout(
-                height=400,
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#FFFFFF", family="Inter"),
-                margin=dict(l=20, r=20, t=20, b=20),
-                xaxis=dict(
-                    gridcolor="rgba(255,255,255,0.06)",
-                    showgrid=True,
-                    zeroline=False
-                ),
-                yaxis=dict(
-                    gridcolor="rgba(255,255,255,0.06)",
-                    showgrid=True,
-                    zeroline=False
-                ),
-                hovermode="x unified"
-            )
-            
-            st.markdown('<div class="chart-container">', unsafe_allow_html=True)
-            st.plotly_chart(fig, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        else:
-            st.info("📊 Volume data unavailable")
-
-    with tab2:
         platforms = None
         if hasattr(analyzer, "platforms") and analyzer.platforms:
             platforms = analyzer.platforms
@@ -582,48 +610,29 @@ if submitted:
         else:
             st.info("📊 Platform data unavailable")
 
-    with tab3:
+    with tab2:
+        # Compter les utilisations de chaque chaîne
         cols = [c for c in ["from_chain", "to_chain"] if c in df.columns]
         if cols:
-            chain_counts = (
-                pd.concat([df[c] for c in cols])
-                .value_counts()
-                .reset_index()
-                .rename(columns={"index": "chain", 0: "count"})
-            )
+            chain_counts = pd.concat([df[c] for c in cols]).value_counts().to_dict()
             
-            fig = px.bar(
-                chain_counts, 
-                x="chain", 
-                y="count",
-                labels={"count": "Interactions", "chain": "Blockchain"}
-            )
+            # Création des badges de chaînes
+            badges_html = '<div class="chain-badges">'
+            for chain, count in sorted(chain_counts.items(), key=lambda x: x[1], reverse=True):
+                # Première lettre pour l'icône
+                icon_letter = chain[0].upper() if chain else "?"
+                badges_html += f'''
+                <div class="chain-badge">
+                    <div class="chain-badge-icon">{icon_letter}</div>
+                    <div>
+                        <div class="chain-badge-name">{chain}</div>
+                        <div class="chain-badge-count">{count} interactions</div>
+                    </div>
+                </div>
+                '''
+            badges_html += '</div>'
             
-            fig.update_traces(
-                marker_color=PRIMARY,
-                hovertemplate="<b>%{x}</b><br>%{y} interactions<extra></extra>"
-            )
-            
-            fig.update_layout(
-                height=400,
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#FFFFFF", family="Inter"),
-                margin=dict(l=20, r=20, t=20, b=20),
-                xaxis=dict(
-                    gridcolor="rgba(255,255,255,0.06)",
-                    showgrid=False
-                ),
-                yaxis=dict(
-                    gridcolor="rgba(255,255,255,0.06)",
-                    showgrid=True
-                ),
-                showlegend=False
-            )
-            
-            st.markdown('<div class="chart-container">', unsafe_allow_html=True)
-            st.plotly_chart(fig, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(badges_html, unsafe_allow_html=True)
         else:
             st.info("📊 Chain data unavailable")
 
