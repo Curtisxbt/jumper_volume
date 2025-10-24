@@ -151,12 +151,18 @@ h1.hero-title {{
     inset 0 1px 0 rgba(255,255,255,0.15);
 }}
 
-/* ===== MEGA KPI CARDS ===== */
+/* ===== MEGA KPI CARDS (3 CARTES) ===== */
 .kpi-grid {{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin: 2.5rem 0;
+}}
+
+@media (max-width: 968px) {{
+  .kpi-grid {{
+    grid-template-columns: 1fr;
+  }}
 }}
 
 .kpi-card {{
@@ -209,22 +215,58 @@ h1.hero-title {{
 }}
 
 .kpi-value {{
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 900;
   background: linear-gradient(135deg, #FFFFFF 0%, {PRIMARY} 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  line-height: 1;
+  line-height: 1.1;
   letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
 }}
 
 .kpi-icon {{
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  font-size: 2rem;
-  opacity: 0.15;
+  font-size: 2.5rem;
+  opacity: 0.35;
+  filter: drop-shadow(0 0 8px rgba(193,165,236,0.4));
+}}
+
+/* ===== BLOCKCHAIN COUNTER SECTION ===== */
+.blockchain-counter {{
+  text-align: center;
+  margin: 2.5rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, 
+    rgba(193,165,236,0.08) 0%, 
+    rgba(139,122,184,0.05) 100%);
+  border: 1px solid rgba(193,165,236,0.2);
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+}}
+
+.blockchain-counter-label {{
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}}
+
+.blockchain-counter-value {{
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #FFFFFF 0%, {PRIMARY} 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
 }}
 
 /* ===== CHAIN BADGE ===== */
@@ -500,7 +542,7 @@ if submitted:
     if not txs:
         st.markdown("""
         <div class="info-card">
-            <h3 style="margin:0 0 0.5rem 0;">📭 No Transfers Found</h3>
+            <h3 style="margin:0 0 0.5rem 0;">🔭 No Transfers Found</h3>
             <p style="margin:0; color: rgba(255,255,255,0.7);">
                 No transactions detected for this wallet in the selected period. 
                 Try adjusting the date range or verify the wallet address.
@@ -527,7 +569,7 @@ if submitted:
     
     num_blockchains = len(unique_chains)
 
-    # --------- MEGA KPIs (4 maintenant) ---------
+    # --------- MEGA KPIs (3 CARTES SEULEMENT) ---------
     st.markdown(f"""
     <div class="kpi-grid">
         <div class="kpi-card">
@@ -545,11 +587,14 @@ if submitted:
             <div class="kpi-label">Swap Volume</div>
             <div class="kpi-value">${analyzer.swap_value:,.0f}</div>
         </div>
-        <div class="kpi-card">
-            <div class="kpi-icon">⛓️</div>
-            <div class="kpi-label">Blockchains</div>
-            <div class="kpi-value">{num_blockchains}</div>
-        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # --------- BLOCKCHAIN COUNTER ---------
+    st.markdown(f"""
+    <div class="blockchain-counter">
+        <div class="blockchain-counter-label">⛓️ Blockchains Used</div>
+        <div class="blockchain-counter-value">{num_blockchains} blockchain{"s" if num_blockchains > 1 else ""}</div>
     </div>
     """, unsafe_allow_html=True)
 
