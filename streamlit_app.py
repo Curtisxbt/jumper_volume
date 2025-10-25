@@ -824,38 +824,21 @@ if submitted:
             st.info("📊 Platform data unavailable")
 
     with tab2:
-        # Count chain usages with FIXED extraction using correct keys
-        chain_counts = {}
-        for tx in txs:
-            from_chain = tx.get("from_blockchain")
-            to_chain = tx.get("to_blockchain")
-            
-            if from_chain and str(from_chain).strip():
-                chain_name = str(from_chain).strip()
-                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
-            
-            if to_chain and str(to_chain).strip():
-                chain_name = str(to_chain).strip()
-                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+        # Extract unique blockchains
+        blockchains_list = sorted(list(unique_chains))
         
-        if chain_counts:
-            badges_html = '<div class="chain-badges">'
-            for chain, count in sorted(chain_counts.items(), key=lambda x: x[1], reverse=True):
-                icon_letter = chain[0].upper() if chain else "?"
-                badges_html += f'''
-                <div class="chain-badge">
-                    <div class="chain-badge-icon">{icon_letter}</div>
-                    <div>
-                        <div class="chain-badge-name">{chain}</div>
-                        <div class="chain-badge-count">{count} interaction{"s" if count != 1 else ""}</div>
-                    </div>
-                </div>
-                '''
-            badges_html += '</div>'
+        if blockchains_list:
+            st.markdown(f"""
+            <div class="glass-card">
+                <h4 style="margin: 0 0 1.5rem 0;">⛓️ Blockchains Used ({len(blockchains_list)})</h4>
+            </div>
+            """, unsafe_allow_html=True)
             
-            st.markdown(badges_html, unsafe_allow_html=True)
+            # Display as simple list
+            for i, chain in enumerate(blockchains_list, 1):
+                st.markdown(f"**{i}.** {chain}")
         else:
-            st.info("📊 Chain data unavailable")
+            st.info("📊 No blockchain data available")
 
     # --------- EXPORT SECTION ---------
     st.markdown("### 📥 Data Export")
