@@ -1,13 +1,12 @@
 # =========================
 #  Jumper – Premium Startup UI
 #  Design System: Glassmorphism + Gradient Accents
-#  by CURTIS_XBT
+#  Primary: #C1A5EC (Lavender)
 # =========================
 import datetime as dt
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-from html import escape
 
 import jumper_volume as jv
 
@@ -51,14 +50,6 @@ st.markdown(f"""
   min-height: 100vh;
 }}
 
-html[data-theme="light"] [data-testid="stAppViewContainer"] {{
-  background: 
-    radial-gradient(ellipse 1400px 900px at 20% 0%, rgba(193,165,236,0.08), transparent),
-    radial-gradient(ellipse 1200px 700px at 80% 100%, rgba(139,122,184,0.06), transparent),
-    linear-gradient(180deg, #FAFAFA 0%, #F5F5F5 100%);
-  color: #0A0A0F;
-}}
-
 .block-container {{
   padding: 2rem 3rem 3rem;
   max-width: 1400px;
@@ -83,12 +74,6 @@ html[data-theme="light"] [data-testid="stAppViewContainer"] {{
   backdrop-filter: blur(20px);
   box-shadow: 0 4px 20px rgba(193,165,236,0.15);
   margin-bottom: 1.5rem;
-}}
-
-html[data-theme="light"] .badge {{
-  background: linear-gradient(135deg, rgba(193,165,236,0.15), rgba(193,165,236,0.25));
-  border: 1px solid rgba(193,165,236,0.4);
-  color: #0A0A0F;
 }}
 
 .badge::before {{
@@ -119,23 +104,12 @@ h1.hero-title {{
   text-shadow: 0 0 80px rgba(193,165,236,0.3);
 }}
 
-html[data-theme="light"] h1.hero-title {{
-  background: linear-gradient(135deg, #0A0A0F 0%, {PRIMARY} 50%, {SECONDARY} 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}}
-
 .hero-subtitle {{
   font-size: 1.25rem;
   color: rgba(255,255,255,0.65);
   font-weight: 500;
   line-height: 1.6;
   max-width: 600px;
-}}
-
-html[data-theme="light"] .hero-subtitle {{
-  color: rgba(10,10,15,0.7);
 }}
 
 .glass-card {{
@@ -152,16 +126,6 @@ html[data-theme="light"] .hero-subtitle {{
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-}}
-
-html[data-theme="light"] .glass-card {{
-  background: linear-gradient(135deg, 
-    rgba(255,255,255,0.9) 0%, 
-    rgba(193,165,236,0.1) 100%);
-  border: 1px solid rgba(193,165,236,0.2);
-  box-shadow: 
-    0 8px 32px rgba(193,165,236,0.15),
-    inset 0 1px 0 rgba(255,255,255,0.8);
 }}
 
 .glass-card::before {{
@@ -214,16 +178,6 @@ html[data-theme="light"] .glass-card {{
   overflow: hidden;
 }}
 
-html[data-theme="light"] .kpi-card {{
-  background: linear-gradient(135deg, 
-    rgba(255,255,255,0.95) 0%, 
-    rgba(193,165,236,0.15) 100%);
-  border: 1.5px solid rgba(193,165,236,0.3);
-  box-shadow: 
-    0 12px 40px rgba(193,165,236,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-}}
-
 .kpi-card::after {{
   content: '';
   position: absolute;
@@ -257,10 +211,6 @@ html[data-theme="light"] .kpi-card {{
   margin-bottom: 0.75rem;
 }}
 
-html[data-theme="light"] .kpi-label {{
-  color: rgba(10,10,15,0.6);
-}}
-
 .kpi-value {{
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 900;
@@ -273,13 +223,6 @@ html[data-theme="light"] .kpi-label {{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: clip;
-}}
-
-html[data-theme="light"] .kpi-value {{
-  background: linear-gradient(135deg, #0A0A0F 0%, {PRIMARY} 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }}
 
 .kpi-icon {{
@@ -303,13 +246,6 @@ html[data-theme="light"] .kpi-value {{
   backdrop-filter: blur(20px);
 }}
 
-html[data-theme="light"] .blockchain-counter {{
-  background: linear-gradient(135deg, 
-    rgba(255,255,255,0.9) 0%, 
-    rgba(193,165,236,0.12) 100%);
-  border: 1px solid rgba(193,165,236,0.25);
-}}
-
 .blockchain-counter-label {{
   font-size: 0.95rem;
   font-weight: 600;
@@ -317,10 +253,6 @@ html[data-theme="light"] .blockchain-counter {{
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 0.5rem;
-}}
-
-html[data-theme="light"] .blockchain-counter-label {{
-  color: rgba(10,10,15,0.6);
 }}
 
 .blockchain-counter-value {{
@@ -333,14 +265,7 @@ html[data-theme="light"] .blockchain-counter-label {{
   letter-spacing: -0.02em;
 }}
 
-html[data-theme="light"] .blockchain-counter-value {{
-  background: linear-gradient(135deg, #0A0A0F 0%, {PRIMARY} 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}}
-
-.chain-list {{
+.chain-badges {{
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -360,21 +285,11 @@ html[data-theme="light"] .blockchain-counter-value {{
   box-shadow: 0 4px 16px rgba(193,165,236,0.1);
 }}
 
-html[data-theme="light"] .chain-badge {{
-  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(193,165,236,0.15));
-  border: 1.5px solid rgba(193,165,236,0.35);
-  box-shadow: 0 4px 16px rgba(193,165,236,0.15);
-}}
-
 .chain-badge:hover {{
   transform: translateY(-3px);
   border-color: rgba(193,165,236,0.6);
   box-shadow: 0 8px 24px rgba(193,165,236,0.25);
   background: linear-gradient(135deg, rgba(193,165,236,0.22), rgba(139,122,184,0.15));
-}}
-
-html[data-theme="light"] .chain-badge:hover {{
-  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(193,165,236,0.25));
 }}
 
 .chain-badge-icon {{
@@ -398,18 +313,10 @@ html[data-theme="light"] .chain-badge:hover {{
   letter-spacing: 0.3px;
 }}
 
-html[data-theme="light"] .chain-badge-name {{
-  color: #0A0A0F;
-}}
-
 .chain-badge-count {{
   font-size: 0.85rem;
   color: rgba(255,255,255,0.6);
   font-weight: 500;
-}}
-
-html[data-theme="light"] .chain-badge-count {{
-  color: rgba(10,10,15,0.6);
 }}
 
 .stTextInput > div > div > input,
@@ -425,23 +332,11 @@ html[data-theme="light"] .chain-badge-count {{
   backdrop-filter: blur(10px) !important;
 }}
 
-html[data-theme="light"] .stTextInput > div > div > input,
-html[data-theme="light"] .stDateInput > div > div > input {{
-  background: rgba(255,255,255,0.95) !important;
-  border: 1.5px solid rgba(193,165,236,0.3) !important;
-  color: #0A0A0F !important;
-}}
-
 .stTextInput > div > div > input:focus,
 .stDateInput > div > div > input:focus {{
   border-color: {PRIMARY} !important;
   box-shadow: 0 0 0 3px rgba(193,165,236,0.15) !important;
   background: rgba(255,255,255,0.12) !important;
-}}
-
-html[data-theme="light"] .stTextInput > div > div > input:focus,
-html[data-theme="light"] .stDateInput > div > div > input:focus {{
-  background: rgba(255,255,255,1) !important;
 }}
 
 .stTextInput label, .stDateInput label {{
@@ -452,45 +347,6 @@ html[data-theme="light"] .stDateInput > div > div > input:focus {{
   letter-spacing: 0.5px !important;
 }}
 
-html[data-theme="light"] .stTextInput label,
-html[data-theme="light"] .stDateInput label {{
-  color: rgba(10,10,15,0.85) !important;
-}}
-
-html[data-theme="dark"] .stButton > button,
-html[data-theme="dark"] .stDownloadButton > button {{
-  background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
-  border: none !important;
-  border-radius: 16px !important;
-  padding: 1rem 2.5rem !important;
-  font-size: 1rem !important;
-  font-weight: 700 !important;
-  color: #0B0B11 !important;
-  letter-spacing: 0.5px !important;
-  text-transform: uppercase !important;
-  box-shadow: 0 8px 32px rgba(193,165,236,0.4) !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  position: relative !important;
-  overflow: hidden !important;
-}}
-
-html[data-theme="light"] .stButton > button,
-html[data-theme="light"] .stDownloadButton > button {{
-  background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
-  border: none !important;
-  border-radius: 16px !important;
-  padding: 1rem 2.5rem !important;
-  font-size: 1rem !important;
-  font-weight: 700 !important;
-  color: #0B0B11 !important;
-  letter-spacing: 0.5px !important;
-  text-transform: uppercase !important;
-  box-shadow: 0 8px 32px rgba(193,165,236,0.4) !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  position: relative !important;
-  overflow: hidden !important;
-}}
-
 .stButton > button,
 .stDownloadButton > button {{
   background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
@@ -499,7 +355,7 @@ html[data-theme="light"] .stDownloadButton > button {{
   padding: 1rem 2.5rem !important;
   font-size: 1rem !important;
   font-weight: 700 !important;
-  color: #0B0B11 !important;
+  color: #FFFFFF !important;
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
   box-shadow: 0 8px 32px rgba(193,165,236,0.4) !important;
@@ -524,12 +380,6 @@ html[data-theme="light"] .stDownloadButton > button {{
 .stDownloadButton > button:hover {{
   transform: translateY(-2px) !important;
   box-shadow: 0 12px 48px rgba(193,165,236,0.6) !important;
-  color: #0B0B11 !important;
-}}
-
-.stButton > button:focus,
-.stDownloadButton > button:focus {{
-  color: #0B0B11 !important;
 }}
 
 .stButton > button:hover::before,
@@ -545,11 +395,6 @@ html[data-theme="light"] .stDownloadButton > button {{
   border: 1px solid rgba(255,255,255,0.08);
 }}
 
-html[data-theme="light"] .stTabs [data-baseweb="tab-list"] {{
-  background: rgba(193,165,236,0.08);
-  border: 1px solid rgba(193,165,236,0.2);
-}}
-
 .stTabs [data-baseweb="tab"] {{
   background: transparent;
   border-radius: 12px;
@@ -559,13 +404,9 @@ html[data-theme="light"] .stTabs [data-baseweb="tab-list"] {{
   transition: all 0.3s;
 }}
 
-html[data-theme="light"] .stTabs [data-baseweb="tab"] {{
-  color: rgba(10,10,15,0.6);
-}}
-
 .stTabs [aria-selected="true"] {{
   background: linear-gradient(135deg, {PRIMARY}, {SECONDARY});
-  color: #0B0B11 !important;
+  color: #FFFFFF !important;
   box-shadow: 0 4px 16px rgba(193,165,236,0.3);
 }}
 
@@ -580,13 +421,6 @@ html[data-theme="light"] .stTabs [data-baseweb="tab"] {{
   backdrop-filter: blur(10px);
 }}
 
-html[data-theme="light"] .chart-container {{
-  background: linear-gradient(135deg, 
-    rgba(255,255,255,0.95) 0%, 
-    rgba(193,165,236,0.08) 100%);
-  border: 1px solid rgba(193,165,236,0.15);
-}}
-
 ::-webkit-scrollbar {{
   width: 10px;
   height: 10px;
@@ -594,10 +428,6 @@ html[data-theme="light"] .chart-container {{
 
 ::-webkit-scrollbar-track {{
   background: rgba(255,255,255,0.03);
-}}
-
-html[data-theme="light"] ::-webkit-scrollbar-track {{
-  background: rgba(193,165,236,0.08);
 }}
 
 ::-webkit-scrollbar-thumb {{
@@ -623,14 +453,6 @@ html[data-theme="light"] ::-webkit-scrollbar-track {{
   padding: 1.5rem;
   margin: 1.5rem 0;
   backdrop-filter: blur(10px);
-}}
-
-html[data-theme="light"] .info-card {{
-  background: linear-gradient(135deg, 
-    rgba(255,255,255,0.95) 0%, 
-    rgba(193,165,236,0.12) 100%);
-  border: 1px solid rgba(193,165,236,0.25);
-  border-left: 4px solid {PRIMARY};
 }}
 
 header[data-testid="stHeader"] {{
@@ -660,51 +482,6 @@ st.markdown("""
   </div>
 </div>
 """, unsafe_allow_html=True)
-
-
-def compute_chain_counts(txs):
-    """Compute chain usage counts from transaction list."""
-    chain_counts = {}
-    for row in txs:
-        from_chain = row.get("from_chain") or row.get("from_blockchain")
-        to_chain = row.get("to_chain") or row.get("to_blockchain")
-        
-        if from_chain and str(from_chain).strip():
-            name = str(from_chain).strip()
-            chain_counts[name] = chain_counts.get(name, 0) + 1
-        
-        if to_chain and str(to_chain).strip():
-            name = str(to_chain).strip()
-            chain_counts[name] = chain_counts.get(name, 0) + 1
-    
-    return chain_counts
-
-
-def render_chain_badges(chain_counts):
-    """Render chain badges HTML."""
-    if not chain_counts:
-        return '<p style="color: rgba(255,255,255,0.6);">No chain data available</p>'
-    
-    items = []
-    sorted_chains = sorted(chain_counts.items(), key=lambda x: x[1], reverse=True)
-    
-    for name, cnt in sorted_chains:
-        safe_name = escape(str(name))
-        icon = escape(safe_name[:1].upper()) if safe_name else "?"
-        plural = "s" if cnt != 1 else ""
-        
-        items.append(f'''
-        <div class="chain-badge">
-            <div class="chain-badge-icon">{icon}</div>
-            <div>
-                <div class="chain-badge-name">{safe_name}</div>
-                <div class="chain-badge-count">{cnt} interaction{plural}</div>
-            </div>
-        </div>
-        ''')
-    
-    return '<div class="chain-list">' + "\n".join(items) + '</div>'
-
 
 # --------- FORM ---------
 with st.container():
@@ -772,9 +549,17 @@ if submitted:
     # --------- BUILD DATAFRAME ---------
     df = pd.DataFrame(txs)
     
-    # --------- COMPUTE CHAIN COUNTS ---------
-    chain_counts = compute_chain_counts(txs)
-    num_blockchains = len(chain_counts)
+    # --------- TOLERANT BLOCKCHAIN EXTRACTION ---------
+    unique_chains = set()
+    for row in txs:
+        f = row.get("from_chain") or row.get("from_blockchain")
+        t = row.get("to_chain") or row.get("to_blockchain")
+        if f and str(f).strip():
+            unique_chains.add(str(f).strip())
+        if t and str(t).strip():
+            unique_chains.add(str(t).strip())
+    
+    num_blockchains = len(unique_chains)
 
     # --------- MEGA KPIs (3 CARDS) ---------
     st.markdown(f"""
@@ -863,8 +648,36 @@ if submitted:
             st.info("📊 Platform data unavailable")
 
     with tab2:
-        badges_html = render_chain_badges(chain_counts)
-        st.markdown(badges_html, unsafe_allow_html=True)
+        # Count chain usages with tolerant extraction
+        chain_counts = {}
+        for row in txs:
+            f = row.get("from_chain") or row.get("from_blockchain")
+            t = row.get("to_chain") or row.get("to_blockchain")
+            if f and str(f).strip():
+                chain_name = str(f).strip()
+                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+            if t and str(t).strip():
+                chain_name = str(t).strip()
+                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+        
+        if chain_counts:
+            badges_html = '<div class="chain-badges">'
+            for chain, count in sorted(chain_counts.items(), key=lambda x: x[1], reverse=True):
+                icon_letter = chain[0].upper() if chain else "?"
+                badges_html += f'''
+                <div class="chain-badge">
+                    <div class="chain-badge-icon">{icon_letter}</div>
+                    <div>
+                        <div class="chain-badge-name">{chain}</div>
+                        <div class="chain-badge-count">{count} interaction{"s" if count != 1 else ""}</div>
+                    </div>
+                </div>
+                '''
+            badges_html += '</div>'
+            
+            st.markdown(badges_html, unsafe_allow_html=True)
+        else:
+            st.info("📊 Chain data unavailable")
 
     # --------- EXPORT SECTION ---------
     st.markdown("### 📥 Data Export")
