@@ -1,7 +1,7 @@
 # =========================
 #  Jumper – Premium Startup UI
 #  Design System: Glassmorphism + Gradient Accents
-#  Built by CURTIS_XBT
+#  by CURTIS_XBT
 # =========================
 import datetime as dt
 import pandas as pd
@@ -786,3 +786,116 @@ if submitted:
         </div>
         <div class="kpi-card">
             <div class="kpi-icon">🌉</div>
+            <div class="kpi-label">Bridge Volume</div>
+            <div class="kpi-value">${analyzer.bridge_value:,.0f}</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">🔄</div>
+            <div class="kpi-label">Swap Volume</div>
+            <div class="kpi-value">${analyzer.swap_value:,.0f}</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # --------- BLOCKCHAIN COUNTER ---------
+    st.markdown(f"""
+    <div class="blockchain-counter">
+        <div class="blockchain-counter-label">⛓️ Chains Used</div>
+        <div class="blockchain-counter-value">{num_blockchains} blockchain{"s" if num_blockchains != 1 else ""}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # --------- DATA PROCESSING FOR CHARTS ---------
+    if "timestamp" in df.columns:
+        df["date"] = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert("UTC").dt.date
+
+    # --------- INSIGHTS SECTION ---------
+    st.markdown("### 📈 Detailed Insights")
+    
+    tab1, tab2 = st.tabs(["🏢 Platform Analytics", "⛓️ Chains Used"])
+
+    with tab1:
+        platforms = None
+        if hasattr(analyzer, "platforms") and analyzer.platforms:
+            platforms = analyzer.platforms
+        elif "platform" in df.columns:
+            platforms = df["platform"].value_counts().to_dict()
+        
+        if platforms:
+            pf = pd.DataFrame([
+                {"platform": k, "count": v} 
+                for k, v in platforms.items()
+            ]).sort_values("count", ascending=False)
+            
+            fig = px.bar(
+                pf, 
+                x="platform", 
+                y="count",
+                labels={"count": "Transactions", "platform": "Platform"}
+            )
+            
+            fig.update_traces(
+                marker_color=PRIMARY,
+                hovertemplate="<b>%{x}</b><br>%{y} transactions<extra></extra>"
+            )
+            
+            fig.update_layout(
+                height=400,
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#FFFFFF", family="Inter"),
+                margin=dict(l=20, r=20, t=20, b=20),
+                xaxis=dict(
+                    gridcolor="rgba(255,255,255,0.06)",
+                    showgrid=False
+                ),
+                yaxis=dict(
+                    gridcolor="rgba(255,255,255,0.06)",
+                    showgrid=True
+                ),
+                showlegend=False
+            )
+            
+            st.markdown('<div class="chart-container">', unsafe_allow_html=True)
+            st.plotly_chart(fig, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+        else:
+            st.info("📊 Platform data unavailable")
+
+    with tab2:
+        badges_html = render_chain_badges(chain_counts)
+        st.markdown(badges_html, unsafe_allow_html=True)
+
+    # --------- EXPORT SECTION ---------
+    st.markdown("### 📥 Data Export")
+    
+    st.markdown("""
+    <div class="glass-card">
+        <h4 style="margin: 0 0 1rem 0;">Download Complete Dataset</h4>
+        <p style="margin: 0; color: rgba(255,255,255,0.7); line-height: 1.6;">
+            Download the full CSV below — the detailed table is intentionally hidden on the page 
+            to maintain a clean, focused interface. Export for further analysis or integration with your tools.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.download_button(
+        "📄 Download CSV Report",
+        df.to_csv(index=False).encode("utf-8"),
+        "jumper_analytics_report.csv",
+        "text/csv",
+        use_container_width=True
+    )
+
+else:
+    # --------- EMPTY STATE ---------
+    st.markdown("""
+    <div class="glass-card" style="text-align: center; padding: 3rem 2rem;">
+        <div style="font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.3;">🔗</div>
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.5rem;">Ready to Analyze</h3>
+        <p style="margin: 0; color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto; line-height: 1.8;">
+            Enter any EVM wallet address above to unlock comprehensive cross-chain analytics. 
+            Track bridges, swaps, and multi-chain activity with institutional-grade precision.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
