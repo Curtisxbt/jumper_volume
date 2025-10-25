@@ -824,19 +824,93 @@ if submitted:
             st.info("📊 Platform data unavailable")
 
     with tab2:
-        # Extract unique blockchains
-        blockchains_list = sorted(list(unique_chains))
+        # Count chain usages with correct keys
+        chain_counts = {}
+        for tx in txs:
+            from_chain = tx.get("from_blockchain")
+            to_chain = tx.get("to_blockchain")
+            
+            if from_chain and str(from_chain).strip():
+                chain_name = str(from_chain).strip()
+                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+            
+            if to_chain and str(to_chain).strip():
+                chain_name = str(to_chain).strip()
+                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
         
-        if blockchains_list:
+        if chain_counts:
+            # Sort by usage (most used first)
+            sorted_chains = sorted(chain_counts.items(), key=lambda x: x[1], reverse=True)
+            
             st.markdown(f"""
-            <div class="glass-card">
-                <h4 style="margin: 0 0 1.5rem 0;">⛓️ Blockchains Used ({len(blockchains_list)})</h4>
+            <div style="margin-bottom: 1.5rem;">
+                <h4 style="margin: 0;">⛓️ Blockchains Used ({len(sorted_chains)})</h4>
+                <p style="margin: 0.5rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">
+                    Sorted by interaction frequency
+                </p>
             </div>
             """, unsafe_allow_html=True)
             
-            # Display as simple list
-            for i, chain in enumerate(blockchains_list, 1):
-                st.markdown(f"**{i}.** {chain}")
+            # Display chains in a grid
+            cols_per_row = 2
+            for i in range(0, len(sorted_chains), cols_per_row):
+                cols = st.columns(cols_per_row)
+                for j, col in enumerate(cols):
+                    if i + j < len(sorted_chains):
+                        chain_name, count = sorted_chains[i + j]
+                        icon_letter = chain_name[0].upper() if chain_name else "?"
+                        
+                        with col:
+                            st.markdown(f"""
+                            <div style="
+                                background: linear-gradient(135deg, rgba(193,165,236,0.15), rgba(139,122,184,0.1));
+                                border: 1.5px solid rgba(193,165,236,0.3);
+                                border-radius: 16px;
+                                padding: 1.25rem;
+                                margin-bottom: 1rem;
+                                backdrop-filter: blur(20px);
+                                transition: all 0.3s;
+                            ">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 50%;
+                                        background: linear-gradient(135deg, {PRIMARY}, {SECONDARY});
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        font-weight: 700;
+                                        font-size: 1.1rem;
+                                        color: #FFF;
+                                        box-shadow: 0 4px 12px rgba(193,165,236,0.3);
+                                        flex-shrink: 0;
+                                    ">
+                                        {icon_letter}
+                                    </div>
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="
+                                            font-weight: 600;
+                                            font-size: 1rem;
+                                            color: var(--text-primary);
+                                            margin-bottom: 0.25rem;
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        ">
+                                            {chain_name}
+                                        </div>
+                                        <div style="
+                                            font-size: 0.85rem;
+                                            color: var(--text-muted);
+                                            font-weight: 500;
+                                        ">
+                                            {count} interaction{"s" if count != 1 else ""}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
         else:
             st.info("📊 No blockchain data available")
 
