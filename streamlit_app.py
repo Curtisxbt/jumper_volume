@@ -1,7 +1,6 @@
 # =========================
-#  Jumper – Premium Startup UI
-#  Design System: Glassmorphism + Gradient Accents
-#  Primary: #C1A5EC (Lavender)
+#  Jumper – Volume Tracker
+#  by CURTIS_XBT
 # =========================
 import datetime as dt
 import pandas as pd
@@ -40,14 +39,41 @@ st.markdown(f"""
   --darker: {DARKER};
 }}
 
+html[data-theme="light"] {{
+  --text-primary: #0A0A0F;
+  --text-muted: #444444;
+  --text-button: #0A0A0F;
+  --bg-card: rgba(0,0,0,0.04);
+  --border-card: rgba(0,0,0,0.12);
+  --input-bg: rgba(0,0,0,0.05);
+  --input-border: rgba(0,0,0,0.2);
+}}
+
+html[data-theme="dark"] {{
+  --text-primary: #FFFFFF;
+  --text-muted: rgba(255,255,255,0.65);
+  --text-button: #FFFFFF;
+  --bg-card: rgba(255,255,255,0.08);
+  --border-card: rgba(255,255,255,0.12);
+  --input-bg: rgba(255,255,255,0.08);
+  --input-border: rgba(193,165,236,0.25);
+}}
+
 [data-testid="stAppViewContainer"] {{
   background: 
     radial-gradient(ellipse 1400px 900px at 20% 0%, rgba(193,165,236,0.15), transparent),
     radial-gradient(ellipse 1200px 700px at 80% 100%, rgba(139,122,184,0.12), transparent),
     radial-gradient(circle 800px at 50% 50%, rgba(193,165,236,0.05), transparent),
     linear-gradient(180deg, {DARKER} 0%, {DARK} 100%);
-  color: #FFFFFF;
+  color: var(--text-primary);
   min-height: 100vh;
+}}
+
+html[data-theme="light"] [data-testid="stAppViewContainer"] {{
+  background: 
+    radial-gradient(ellipse 1400px 900px at 20% 0%, rgba(193,165,236,0.08), transparent),
+    radial-gradient(ellipse 1200px 700px at 80% 100%, rgba(139,122,184,0.06), transparent),
+    linear-gradient(180deg, #FAFAFA 0%, #F5F5F5 100%);
 }}
 
 .block-container {{
@@ -74,6 +100,11 @@ st.markdown(f"""
   backdrop-filter: blur(20px);
   box-shadow: 0 4px 20px rgba(193,165,236,0.15);
   margin-bottom: 1.5rem;
+}}
+
+html[data-theme="light"] .badge {{
+  background: linear-gradient(135deg, rgba(193,165,236,0.15), rgba(193,165,236,0.25));
+  border: 1px solid rgba(193,165,236,0.4);
 }}
 
 .badge::before {{
@@ -104,9 +135,16 @@ h1.hero-title {{
   text-shadow: 0 0 80px rgba(193,165,236,0.3);
 }}
 
+html[data-theme="light"] h1.hero-title {{
+  background: linear-gradient(135deg, #0A0A0F 0%, {SECONDARY} 50%, {PRIMARY} 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}}
+
 .hero-subtitle {{
   font-size: 1.25rem;
-  color: rgba(255,255,255,0.65);
+  color: var(--text-muted);
   font-weight: 500;
   line-height: 1.6;
   max-width: 600px;
@@ -114,9 +152,9 @@ h1.hero-title {{
 
 .glass-card {{
   background: linear-gradient(135deg, 
-    rgba(255,255,255,0.08) 0%, 
+    var(--bg-card) 0%, 
     rgba(193,165,236,0.05) 100%);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid var(--border-card);
   border-radius: 24px;
   padding: 2rem;
   backdrop-filter: blur(20px);
@@ -126,6 +164,12 @@ h1.hero-title {{
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+}}
+
+html[data-theme="light"] .glass-card {{
+  box-shadow: 
+    0 8px 32px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.5);
 }}
 
 .glass-card::before {{
@@ -147,6 +191,12 @@ h1.hero-title {{
   box-shadow: 
     0 16px 48px rgba(193,165,236,0.2),
     inset 0 1px 0 rgba(255,255,255,0.15);
+}}
+
+html[data-theme="light"] .glass-card:hover {{
+  box-shadow: 
+    0 16px 48px rgba(193,165,236,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.8);
 }}
 
 .kpi-grid {{
@@ -178,6 +228,16 @@ h1.hero-title {{
   overflow: hidden;
 }}
 
+html[data-theme="light"] .kpi-card {{
+  background: linear-gradient(135deg, 
+    rgba(193,165,236,0.12) 0%, 
+    rgba(139,122,184,0.10) 100%);
+  border: 1.5px solid rgba(193,165,236,0.3);
+  box-shadow: 
+    0 12px 40px rgba(193,165,236,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+}}
+
 .kpi-card::after {{
   content: '';
   position: absolute;
@@ -198,6 +258,12 @@ h1.hero-title {{
     inset 0 1px 0 rgba(255,255,255,0.2);
 }}
 
+html[data-theme="light"] .kpi-card:hover {{
+  box-shadow: 
+    0 20px 60px rgba(193,165,236,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.8);
+}}
+
 .kpi-card:hover::after {{
   opacity: 1;
 }}
@@ -205,7 +271,7 @@ h1.hero-title {{
 .kpi-label {{
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.6);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 0.75rem;
@@ -223,6 +289,13 @@ h1.hero-title {{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: clip;
+}}
+
+html[data-theme="light"] .kpi-value {{
+  background: linear-gradient(135deg, #0A0A0F 0%, {SECONDARY} 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }}
 
 .kpi-icon {{
@@ -246,10 +319,17 @@ h1.hero-title {{
   backdrop-filter: blur(20px);
 }}
 
+html[data-theme="light"] .blockchain-counter {{
+  background: linear-gradient(135deg, 
+    rgba(193,165,236,0.10) 0%, 
+    rgba(139,122,184,0.08) 100%);
+  border: 1px solid rgba(193,165,236,0.3);
+}}
+
 .blockchain-counter-label {{
   font-size: 0.95rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.6);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 0.5rem;
@@ -263,6 +343,13 @@ h1.hero-title {{
   background-clip: text;
   color: transparent;
   letter-spacing: -0.02em;
+}}
+
+html[data-theme="light"] .blockchain-counter-value {{
+  background: linear-gradient(135deg, #0A0A0F 0%, {SECONDARY} 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }}
 
 .chain-badges {{
@@ -283,6 +370,11 @@ h1.hero-title {{
   backdrop-filter: blur(20px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 16px rgba(193,165,236,0.1);
+}}
+
+html[data-theme="light"] .chain-badge {{
+  background: linear-gradient(135deg, rgba(193,165,236,0.15), rgba(139,122,184,0.12));
+  border: 1.5px solid rgba(193,165,236,0.35);
 }}
 
 .chain-badge:hover {{
@@ -309,18 +401,31 @@ h1.hero-title {{
 .chain-badge-name {{
   font-weight: 600;
   font-size: 1rem;
-  color: #FFFFFF;
+  color: var(--text-primary);
   letter-spacing: 0.3px;
 }}
 
 .chain-badge-count {{
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.6);
+  color: var(--text-muted);
   font-weight: 500;
 }}
 
-.stTextInput > div > div > input,
-.stDateInput > div > div > input {{
+html[data-theme="light"] .stTextInput > div > div > input,
+html[data-theme="light"] .stDateInput > div > div > input {{
+  background: rgba(0,0,0,0.05) !important;
+  border: 1.5px solid rgba(0,0,0,0.2) !important;
+  border-radius: 16px !important;
+  color: #0A0A0F !important;
+  padding: 0.9rem 1.2rem !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  transition: all 0.3s !important;
+  backdrop-filter: blur(10px) !important;
+}}
+
+html[data-theme="dark"] .stTextInput > div > div > input,
+html[data-theme="dark"] .stDateInput > div > div > input {{
   background: rgba(255,255,255,0.08) !important;
   border: 1.5px solid rgba(193,165,236,0.25) !important;
   border-radius: 16px !important;
@@ -339,16 +444,38 @@ h1.hero-title {{
   background: rgba(255,255,255,0.12) !important;
 }}
 
+html[data-theme="light"] .stTextInput > div > div > input:focus,
+html[data-theme="light"] .stDateInput > div > div > input:focus {{
+  background: rgba(0,0,0,0.08) !important;
+}}
+
 .stTextInput label, .stDateInput label {{
   font-weight: 600 !important;
-  color: rgba(255,255,255,0.85) !important;
+  color: var(--text-primary) !important;
   font-size: 0.9rem !important;
   text-transform: uppercase !important;
   letter-spacing: 0.5px !important;
 }}
 
-.stButton > button,
-.stDownloadButton > button {{
+html[data-theme="light"] .stButton > button,
+html[data-theme="light"] .stDownloadButton > button {{
+  background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 1rem 2.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #0A0A0F !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 8px 32px rgba(193,165,236,0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}}
+
+html[data-theme="dark"] .stButton > button,
+html[data-theme="dark"] .stDownloadButton > button {{
   background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
   border: none !important;
   border-radius: 16px !important;
@@ -376,15 +503,37 @@ h1.hero-title {{
   transition: left 0.5s;
 }}
 
-.stButton > button:hover,
-.stDownloadButton > button:hover {{
+html[data-theme="light"] .stButton > button:hover,
+html[data-theme="light"] .stDownloadButton > button:hover {{
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 48px rgba(193,165,236,0.5) !important;
+  color: #0A0A0F !important;
+}}
+
+html[data-theme="dark"] .stButton > button:hover,
+html[data-theme="dark"] .stDownloadButton > button:hover {{
   transform: translateY(-2px) !important;
   box-shadow: 0 12px 48px rgba(193,165,236,0.6) !important;
+  color: #FFFFFF !important;
 }}
 
 .stButton > button:hover::before,
 .stDownloadButton > button:hover::before {{
   left: 100%;
+}}
+
+html[data-theme="light"] .stButton > button:active,
+html[data-theme="light"] .stDownloadButton > button:active,
+html[data-theme="light"] .stButton > button:focus,
+html[data-theme="light"] .stDownloadButton > button:focus {{
+  color: #0A0A0F !important;
+}}
+
+html[data-theme="dark"] .stButton > button:active,
+html[data-theme="dark"] .stDownloadButton > button:active,
+html[data-theme="dark"] .stButton > button:focus,
+html[data-theme="dark"] .stDownloadButton > button:focus {{
+  color: #FFFFFF !important;
 }}
 
 .stTabs [data-baseweb="tab-list"] {{
@@ -395,12 +544,17 @@ h1.hero-title {{
   border: 1px solid rgba(255,255,255,0.08);
 }}
 
+html[data-theme="light"] .stTabs [data-baseweb="tab-list"] {{
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.1);
+}}
+
 .stTabs [data-baseweb="tab"] {{
   background: transparent;
   border-radius: 12px;
   padding: 0.75rem 1.5rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.6);
+  color: var(--text-muted);
   transition: all 0.3s;
 }}
 
@@ -421,6 +575,13 @@ h1.hero-title {{
   backdrop-filter: blur(10px);
 }}
 
+html[data-theme="light"] .chart-container {{
+  background: linear-gradient(135deg, 
+    rgba(0,0,0,0.02) 0%, 
+    rgba(193,165,236,0.05) 100%);
+  border: 1px solid rgba(0,0,0,0.08);
+}}
+
 ::-webkit-scrollbar {{
   width: 10px;
   height: 10px;
@@ -428,6 +589,10 @@ h1.hero-title {{
 
 ::-webkit-scrollbar-track {{
   background: rgba(255,255,255,0.03);
+}}
+
+html[data-theme="light"] ::-webkit-scrollbar-track {{
+  background: rgba(0,0,0,0.03);
 }}
 
 ::-webkit-scrollbar-thumb {{
@@ -453,6 +618,14 @@ h1.hero-title {{
   padding: 1.5rem;
   margin: 1.5rem 0;
   backdrop-filter: blur(10px);
+}}
+
+html[data-theme="light"] .info-card {{
+  background: linear-gradient(135deg, 
+    rgba(193,165,236,0.10) 0%, 
+    rgba(139,122,184,0.08) 100%);
+  border: 1px solid rgba(193,165,236,0.3);
+  border-left: 4px solid {PRIMARY};
 }}
 
 header[data-testid="stHeader"] {{
@@ -595,6 +768,7 @@ if submitted:
         df["date"] = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert("UTC").dt.date
 
     # --------- INSIGHTS SECTION ---------
+
     st.markdown("### 📈 Detailed Insights")
     
     tab1, tab2 = st.tabs(["🏢 Platform Analytics", "⛓️ Chains Used"])
@@ -686,7 +860,7 @@ if submitted:
     <div class="glass-card">
         <h4 style="margin: 0 0 1rem 0;">Download Complete Dataset</h4>
         <p style="margin: 0; color: rgba(255,255,255,0.7); line-height: 1.6;">
-            Download the full CSV below — the detailed table is intentionally hidden on the page 
+            Download the full CSV below – the detailed table is intentionally hidden on the page 
             to maintain a clean, focused interface. Export for further analysis or integration with your tools.
         </p>
     </div>
