@@ -1,12 +1,11 @@
 # =========================
-#  Jumper — Volume Tracker
+#  Jumper – Volume Tracker
 #  by CURTIS_XBT
 # =========================
 import datetime as dt
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-import html
 
 import jumper_volume as jv
 
@@ -353,7 +352,7 @@ html[data-theme="light"] .blockchain-counter-value {{
   color: transparent;
 }}
 
-.chain-list {{
+.chain-badges {{
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -643,28 +642,6 @@ footer {{
 </style>
 """, unsafe_allow_html=True)
 
-def render_chain_badges(chain_counts):
-    if not chain_counts:
-        return '<div class="info-card"><p style="margin:0;">📊 No chain data available</p></div>'
-    
-    badges_html = '<div class="chain-list">'
-    for chain, count in sorted(chain_counts.items(), key=lambda x: x[1], reverse=True):
-        safe_chain = html.escape(str(chain))
-        icon_letter = safe_chain[0].upper() if safe_chain else "?"
-        plural = "s" if count != 1 else ""
-        
-        badges_html += f'''
-        <div class="chain-badge">
-            <div class="chain-badge-icon">{icon_letter}</div>
-            <div>
-                <div class="chain-badge-name">{safe_chain}</div>
-                <div class="chain-badge-count">{count} interaction{plural}</div>
-            </div>
-        </div>
-        '''
-    badges_html += '</div>'
-    return badges_html
-
 # --------- HERO ---------
 st.markdown("""
 <div class="hero-container">
@@ -745,23 +722,17 @@ if submitted:
     # --------- BUILD DATAFRAME ---------
     df = pd.DataFrame(txs)
     
-    # --------- EXTRACT UNIQUE CHAINS AND COUNT ---------
+    # --------- FIXED BLOCKCHAIN EXTRACTION ---------
+    # Use the correct keys from build_transaction_dict: 'from_blockchain' and 'to_blockchain'
     unique_chains = set()
-    chain_counts = {}
-    
-    for row in txs:
-        from_chain = row.get("from_chain") or row.get("from_blockchain")
-        to_chain = row.get("to_chain") or row.get("to_blockchain")
+    for tx in txs:
+        from_chain = tx.get("from_blockchain")
+        to_chain = tx.get("to_blockchain")
         
         if from_chain and str(from_chain).strip():
-            chain_name = str(from_chain).strip()
-            unique_chains.add(chain_name)
-            chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
-        
+            unique_chains.add(str(from_chain).strip())
         if to_chain and str(to_chain).strip():
-            chain_name = str(to_chain).strip()
-            unique_chains.add(chain_name)
-            chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+            unique_chains.add(str(to_chain).strip())
     
     num_blockchains = len(unique_chains)
 
@@ -799,6 +770,7 @@ if submitted:
         df["date"] = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert("UTC").dt.date
 
     # --------- INSIGHTS SECTION ---------
+
     st.markdown("### 📈 Detailed Insights")
     
     tab1, tab2 = st.tabs(["🏢 Platform Analytics", "⛓️ Chains Used"])
@@ -852,7 +824,38 @@ if submitted:
             st.info("📊 Platform data unavailable")
 
     with tab2:
-        st.markdown(render_chain_badges(chain_counts), unsafe_allow_html=True)
+        # Count chain usages with FIXED extraction using correct keys
+        chain_counts = {}
+        for tx in txs:
+            from_chain = tx.get("from_blockchain")
+            to_chain = tx.get("to_blockchain")
+            
+            if from_chain and str(from_chain).strip():
+                chain_name = str(from_chain).strip()
+                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+            
+            if to_chain and str(to_chain).strip():
+                chain_name = str(to_chain).strip()
+                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
+        
+        if chain_counts:
+            badges_html = '<div class="chain-badges">'
+            for chain, count in sorted(chain_counts.items(), key=lambda x: x[1], reverse=True):
+                icon_letter = chain[0].upper() if chain else "?"
+                badges_html += f'''
+                <div class="chain-badge">
+                    <div class="chain-badge-icon">{icon_letter}</div>
+                    <div>
+                        <div class="chain-badge-name">{chain}</div>
+                        <div class="chain-badge-count">{count} interaction{"s" if count != 1 else ""}</div>
+                    </div>
+                </div>
+                '''
+            badges_html += '</div>'
+            
+            st.markdown(badges_html, unsafe_allow_html=True)
+        else:
+            st.info("📊 Chain data unavailable")
 
     # --------- EXPORT SECTION ---------
     st.markdown("### 📥 Data Export")
@@ -861,7 +864,7 @@ if submitted:
     <div class="glass-card">
         <h4 style="margin: 0 0 1rem 0;">Download Complete Dataset</h4>
         <p style="margin: 0; color: rgba(255,255,255,0.7); line-height: 1.6;">
-            Download the full CSV below — the detailed table is intentionally hidden on the page 
+            Download the full CSV below – the detailed table is intentionally hidden on the page 
             to maintain a clean, focused interface. Export for further analysis or integration with your tools.
         </p>
     </div>
