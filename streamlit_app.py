@@ -1,12 +1,13 @@
 # =========================
 #  Jumper – Premium Startup UI
 #  Design System: Glassmorphism + Gradient Accents
-#  Primary: #C1A5EC (Lavender)
+#  Built by CURTIS_XBT
 # =========================
 import datetime as dt
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+from html import escape
 
 import jumper_volume as jv
 
@@ -50,12 +51,19 @@ st.markdown(f"""
   min-height: 100vh;
 }}
 
+html[data-theme="light"] [data-testid="stAppViewContainer"] {{
+  background: 
+    radial-gradient(ellipse 1400px 900px at 20% 0%, rgba(193,165,236,0.08), transparent),
+    radial-gradient(ellipse 1200px 700px at 80% 100%, rgba(139,122,184,0.06), transparent),
+    linear-gradient(180deg, #FAFAFA 0%, #F5F5F5 100%);
+  color: #0A0A0F;
+}}
+
 .block-container {{
   padding: 2rem 3rem 3rem;
   max-width: 1400px;
 }}
 
-/* ===== HERO SECTION ===== */
 .hero-container {{
   margin-bottom: 3rem;
   position: relative;
@@ -75,6 +83,12 @@ st.markdown(f"""
   backdrop-filter: blur(20px);
   box-shadow: 0 4px 20px rgba(193,165,236,0.15);
   margin-bottom: 1.5rem;
+}}
+
+html[data-theme="light"] .badge {{
+  background: linear-gradient(135deg, rgba(193,165,236,0.15), rgba(193,165,236,0.25));
+  border: 1px solid rgba(193,165,236,0.4);
+  color: #0A0A0F;
 }}
 
 .badge::before {{
@@ -105,6 +119,13 @@ h1.hero-title {{
   text-shadow: 0 0 80px rgba(193,165,236,0.3);
 }}
 
+html[data-theme="light"] h1.hero-title {{
+  background: linear-gradient(135deg, #0A0A0F 0%, {PRIMARY} 50%, {SECONDARY} 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}}
+
 .hero-subtitle {{
   font-size: 1.25rem;
   color: rgba(255,255,255,0.65);
@@ -113,7 +134,10 @@ h1.hero-title {{
   max-width: 600px;
 }}
 
-/* ===== GLASS CARD SYSTEM ===== */
+html[data-theme="light"] .hero-subtitle {{
+  color: rgba(10,10,15,0.7);
+}}
+
 .glass-card {{
   background: linear-gradient(135deg, 
     rgba(255,255,255,0.08) 0%, 
@@ -128,6 +152,16 @@ h1.hero-title {{
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+}}
+
+html[data-theme="light"] .glass-card {{
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.9) 0%, 
+    rgba(193,165,236,0.1) 100%);
+  border: 1px solid rgba(193,165,236,0.2);
+  box-shadow: 
+    0 8px 32px rgba(193,165,236,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.8);
 }}
 
 .glass-card::before {{
@@ -151,7 +185,6 @@ h1.hero-title {{
     inset 0 1px 0 rgba(255,255,255,0.15);
 }}
 
-/* ===== MEGA KPI CARDS (3 CARTES) ===== */
 .kpi-grid {{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -179,6 +212,16 @@ h1.hero-title {{
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+}}
+
+html[data-theme="light"] .kpi-card {{
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.95) 0%, 
+    rgba(193,165,236,0.15) 100%);
+  border: 1.5px solid rgba(193,165,236,0.3);
+  box-shadow: 
+    0 12px 40px rgba(193,165,236,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.9);
 }}
 
 .kpi-card::after {{
@@ -214,6 +257,10 @@ h1.hero-title {{
   margin-bottom: 0.75rem;
 }}
 
+html[data-theme="light"] .kpi-label {{
+  color: rgba(10,10,15,0.6);
+}}
+
 .kpi-value {{
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 900;
@@ -228,6 +275,13 @@ h1.hero-title {{
   text-overflow: clip;
 }}
 
+html[data-theme="light"] .kpi-value {{
+  background: linear-gradient(135deg, #0A0A0F 0%, {PRIMARY} 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}}
+
 .kpi-icon {{
   position: absolute;
   top: 1.5rem;
@@ -237,7 +291,6 @@ h1.hero-title {{
   filter: drop-shadow(0 0 8px rgba(193,165,236,0.4));
 }}
 
-/* ===== BLOCKCHAIN COUNTER SECTION ===== */
 .blockchain-counter {{
   text-align: center;
   margin: 2.5rem 0;
@@ -250,6 +303,13 @@ h1.hero-title {{
   backdrop-filter: blur(20px);
 }}
 
+html[data-theme="light"] .blockchain-counter {{
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.9) 0%, 
+    rgba(193,165,236,0.12) 100%);
+  border: 1px solid rgba(193,165,236,0.25);
+}}
+
 .blockchain-counter-label {{
   font-size: 0.95rem;
   font-weight: 600;
@@ -257,6 +317,10 @@ h1.hero-title {{
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 0.5rem;
+}}
+
+html[data-theme="light"] .blockchain-counter-label {{
+  color: rgba(10,10,15,0.6);
 }}
 
 .blockchain-counter-value {{
@@ -269,8 +333,14 @@ h1.hero-title {{
   letter-spacing: -0.02em;
 }}
 
-/* ===== CHAIN BADGE ===== */
-.chain-badges {{
+html[data-theme="light"] .blockchain-counter-value {{
+  background: linear-gradient(135deg, #0A0A0F 0%, {PRIMARY} 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}}
+
+.chain-list {{
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -290,11 +360,21 @@ h1.hero-title {{
   box-shadow: 0 4px 16px rgba(193,165,236,0.1);
 }}
 
+html[data-theme="light"] .chain-badge {{
+  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(193,165,236,0.15));
+  border: 1.5px solid rgba(193,165,236,0.35);
+  box-shadow: 0 4px 16px rgba(193,165,236,0.15);
+}}
+
 .chain-badge:hover {{
   transform: translateY(-3px);
   border-color: rgba(193,165,236,0.6);
   box-shadow: 0 8px 24px rgba(193,165,236,0.25);
   background: linear-gradient(135deg, rgba(193,165,236,0.22), rgba(139,122,184,0.15));
+}}
+
+html[data-theme="light"] .chain-badge:hover {{
+  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(193,165,236,0.25));
 }}
 
 .chain-badge-icon {{
@@ -318,13 +398,20 @@ h1.hero-title {{
   letter-spacing: 0.3px;
 }}
 
+html[data-theme="light"] .chain-badge-name {{
+  color: #0A0A0F;
+}}
+
 .chain-badge-count {{
   font-size: 0.85rem;
   color: rgba(255,255,255,0.6);
   font-weight: 500;
 }}
 
-/* ===== FORM STYLING ===== */
+html[data-theme="light"] .chain-badge-count {{
+  color: rgba(10,10,15,0.6);
+}}
+
 .stTextInput > div > div > input,
 .stDateInput > div > div > input {{
   background: rgba(255,255,255,0.08) !important;
@@ -338,11 +425,23 @@ h1.hero-title {{
   backdrop-filter: blur(10px) !important;
 }}
 
+html[data-theme="light"] .stTextInput > div > div > input,
+html[data-theme="light"] .stDateInput > div > div > input {{
+  background: rgba(255,255,255,0.95) !important;
+  border: 1.5px solid rgba(193,165,236,0.3) !important;
+  color: #0A0A0F !important;
+}}
+
 .stTextInput > div > div > input:focus,
 .stDateInput > div > div > input:focus {{
   border-color: {PRIMARY} !important;
   box-shadow: 0 0 0 3px rgba(193,165,236,0.15) !important;
   background: rgba(255,255,255,0.12) !important;
+}}
+
+html[data-theme="light"] .stTextInput > div > div > input:focus,
+html[data-theme="light"] .stDateInput > div > div > input:focus {{
+  background: rgba(255,255,255,1) !important;
 }}
 
 .stTextInput label, .stDateInput label {{
@@ -353,7 +452,45 @@ h1.hero-title {{
   letter-spacing: 0.5px !important;
 }}
 
-/* ===== BUTTON STYLING ===== */
+html[data-theme="light"] .stTextInput label,
+html[data-theme="light"] .stDateInput label {{
+  color: rgba(10,10,15,0.85) !important;
+}}
+
+html[data-theme="dark"] .stButton > button,
+html[data-theme="dark"] .stDownloadButton > button {{
+  background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 1rem 2.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #0B0B11 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 8px 32px rgba(193,165,236,0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}}
+
+html[data-theme="light"] .stButton > button,
+html[data-theme="light"] .stDownloadButton > button {{
+  background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 1rem 2.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #0B0B11 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 8px 32px rgba(193,165,236,0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}}
+
 .stButton > button,
 .stDownloadButton > button {{
   background: linear-gradient(135deg, {PRIMARY} 0%, {SECONDARY} 100%) !important;
@@ -362,7 +499,7 @@ h1.hero-title {{
   padding: 1rem 2.5rem !important;
   font-size: 1rem !important;
   font-weight: 700 !important;
-  color: #FFFFFF !important;
+  color: #0B0B11 !important;
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
   box-shadow: 0 8px 32px rgba(193,165,236,0.4) !important;
@@ -387,6 +524,12 @@ h1.hero-title {{
 .stDownloadButton > button:hover {{
   transform: translateY(-2px) !important;
   box-shadow: 0 12px 48px rgba(193,165,236,0.6) !important;
+  color: #0B0B11 !important;
+}}
+
+.stButton > button:focus,
+.stDownloadButton > button:focus {{
+  color: #0B0B11 !important;
 }}
 
 .stButton > button:hover::before,
@@ -394,13 +537,17 @@ h1.hero-title {{
   left: 100%;
 }}
 
-/* ===== TABS STYLING ===== */
 .stTabs [data-baseweb="tab-list"] {{
   gap: 1rem;
   background: rgba(255,255,255,0.03);
   padding: 0.5rem;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.08);
+}}
+
+html[data-theme="light"] .stTabs [data-baseweb="tab-list"] {{
+  background: rgba(193,165,236,0.08);
+  border: 1px solid rgba(193,165,236,0.2);
 }}
 
 .stTabs [data-baseweb="tab"] {{
@@ -412,13 +559,16 @@ h1.hero-title {{
   transition: all 0.3s;
 }}
 
+html[data-theme="light"] .stTabs [data-baseweb="tab"] {{
+  color: rgba(10,10,15,0.6);
+}}
+
 .stTabs [aria-selected="true"] {{
   background: linear-gradient(135deg, {PRIMARY}, {SECONDARY});
-  color: #FFFFFF !important;
+  color: #0B0B11 !important;
   box-shadow: 0 4px 16px rgba(193,165,236,0.3);
 }}
 
-/* ===== CHART CONTAINER ===== */
 .chart-container {{
   background: linear-gradient(135deg, 
     rgba(255,255,255,0.04) 0%, 
@@ -430,7 +580,13 @@ h1.hero-title {{
   backdrop-filter: blur(10px);
 }}
 
-/* ===== SCROLLBAR ===== */
+html[data-theme="light"] .chart-container {{
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.95) 0%, 
+    rgba(193,165,236,0.08) 100%);
+  border: 1px solid rgba(193,165,236,0.15);
+}}
+
 ::-webkit-scrollbar {{
   width: 10px;
   height: 10px;
@@ -438,6 +594,10 @@ h1.hero-title {{
 
 ::-webkit-scrollbar-track {{
   background: rgba(255,255,255,0.03);
+}}
+
+html[data-theme="light"] ::-webkit-scrollbar-track {{
+  background: rgba(193,165,236,0.08);
 }}
 
 ::-webkit-scrollbar-thumb {{
@@ -449,12 +609,10 @@ h1.hero-title {{
   background: linear-gradient(180deg, {ACCENT}, {PRIMARY});
 }}
 
-/* ===== SPINNER ===== */
 .stSpinner > div {{
   border-top-color: {PRIMARY} !important;
 }}
 
-/* ===== INFO CARDS ===== */
 .info-card {{
   background: linear-gradient(135deg, 
     rgba(193,165,236,0.08) 0%, 
@@ -467,7 +625,14 @@ h1.hero-title {{
   backdrop-filter: blur(10px);
 }}
 
-/* ===== HIDE DEFAULTS ===== */
+html[data-theme="light"] .info-card {{
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.95) 0%, 
+    rgba(193,165,236,0.12) 100%);
+  border: 1px solid rgba(193,165,236,0.25);
+  border-left: 4px solid {PRIMARY};
+}}
+
 header[data-testid="stHeader"] {{
   background: transparent;
 }}
@@ -496,6 +661,51 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+
+def compute_chain_counts(txs):
+    """Compute chain usage counts from transaction list."""
+    chain_counts = {}
+    for row in txs:
+        from_chain = row.get("from_chain") or row.get("from_blockchain")
+        to_chain = row.get("to_chain") or row.get("to_blockchain")
+        
+        if from_chain and str(from_chain).strip():
+            name = str(from_chain).strip()
+            chain_counts[name] = chain_counts.get(name, 0) + 1
+        
+        if to_chain and str(to_chain).strip():
+            name = str(to_chain).strip()
+            chain_counts[name] = chain_counts.get(name, 0) + 1
+    
+    return chain_counts
+
+
+def render_chain_badges(chain_counts):
+    """Render chain badges HTML."""
+    if not chain_counts:
+        return '<p style="color: rgba(255,255,255,0.6);">No chain data available</p>'
+    
+    items = []
+    sorted_chains = sorted(chain_counts.items(), key=lambda x: x[1], reverse=True)
+    
+    for name, cnt in sorted_chains:
+        safe_name = escape(str(name))
+        icon = escape(safe_name[:1].upper()) if safe_name else "?"
+        plural = "s" if cnt != 1 else ""
+        
+        items.append(f'''
+        <div class="chain-badge">
+            <div class="chain-badge-icon">{icon}</div>
+            <div>
+                <div class="chain-badge-name">{safe_name}</div>
+                <div class="chain-badge-count">{cnt} interaction{plural}</div>
+            </div>
+        </div>
+        ''')
+    
+    return '<div class="chain-list">' + "\n".join(items) + '</div>'
+
+
 # --------- FORM ---------
 with st.container():
     with st.form("params"):
@@ -503,7 +713,7 @@ with st.container():
         
         with col1:
             wallet = st.text_input(
-                "Wallet Address", 
+                "Wallet Address (EVM)", 
                 value="",
                 placeholder="0x...",
                 help="Enter any EVM-compatible wallet address"
@@ -559,25 +769,14 @@ if submitted:
         st.warning("⚠️ No analyzable data returned")
         st.stop()
 
-    # --------- TOLERANT BLOCKCHAIN COUNTER (FIX) ---------
+    # --------- BUILD DATAFRAME ---------
     df = pd.DataFrame(txs)
-    unique_chains = set()
     
-    # Iterate through each row and extract chain names tolerantly
-    for _, row in df.iterrows():
-        # Extract from_chain using tolerant logic
-        from_chain = row.get("from_chain") or row.get("from_blockchain")
-        if from_chain and isinstance(from_chain, str) and from_chain.strip():
-            unique_chains.add(from_chain.strip())
-        
-        # Extract to_chain using tolerant logic
-        to_chain = row.get("to_chain") or row.get("to_blockchain")
-        if to_chain and isinstance(to_chain, str) and to_chain.strip():
-            unique_chains.add(to_chain.strip())
-    
-    num_blockchains = len(unique_chains)
+    # --------- COMPUTE CHAIN COUNTS ---------
+    chain_counts = compute_chain_counts(txs)
+    num_blockchains = len(chain_counts)
 
-    # --------- MEGA KPIs (3 CARTES SEULEMENT) ---------
+    # --------- MEGA KPIs (3 CARDS) ---------
     st.markdown(f"""
     <div class="kpi-grid">
         <div class="kpi-card">
@@ -587,149 +786,3 @@ if submitted:
         </div>
         <div class="kpi-card">
             <div class="kpi-icon">🌉</div>
-            <div class="kpi-label">Bridge Volume</div>
-            <div class="kpi-value">${analyzer.bridge_value:,.0f}</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-icon">🔄</div>
-            <div class="kpi-label">Swap Volume</div>
-            <div class="kpi-value">${analyzer.swap_value:,.0f}</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # --------- BLOCKCHAIN COUNTER ---------
-    st.markdown(f"""
-    <div class="blockchain-counter">
-        <div class="blockchain-counter-label">⛓️ Blockchains Used</div>
-        <div class="blockchain-counter-value">{num_blockchains} blockchain{"s" if num_blockchains != 1 else ""}</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # --------- DATA PROCESSING ---------
-    if "timestamp" in df.columns:
-        df["date"] = pd.to_datetime(df["timestamp"], unit="s", utc=True).dt.tz_convert("UTC").dt.date
-
-    # --------- INSIGHTS SECTION ---------
-    st.markdown("### 📈 Detailed Insights")
-    
-    tab1, tab2 = st.tabs(["🏢 Platform Analytics", "⛓️ Blockchains Used"])
-
-    with tab1:
-        platforms = None
-        if hasattr(analyzer, "platforms") and analyzer.platforms:
-            platforms = analyzer.platforms
-        elif "platform" in df.columns:
-            platforms = df["platform"].value_counts().to_dict()
-        
-        if platforms:
-            pf = pd.DataFrame([
-                {"platform": k, "count": v} 
-                for k, v in platforms.items()
-            ]).sort_values("count", ascending=False)
-            
-            fig = px.bar(
-                pf, 
-                x="platform", 
-                y="count",
-                labels={"count": "Transactions", "platform": "Platform"}
-            )
-            
-            fig.update_traces(
-                marker_color=PRIMARY,
-                hovertemplate="<b>%{x}</b><br>%{y} transactions<extra></extra>"
-            )
-            
-            fig.update_layout(
-                height=400,
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#FFFFFF", family="Inter"),
-                margin=dict(l=20, r=20, t=20, b=20),
-                xaxis=dict(
-                    gridcolor="rgba(255,255,255,0.06)",
-                    showgrid=False
-                ),
-                yaxis=dict(
-                    gridcolor="rgba(255,255,255,0.06)",
-                    showgrid=True
-                ),
-                showlegend=False
-            )
-            
-            st.markdown('<div class="chart-container">', unsafe_allow_html=True)
-            st.plotly_chart(fig, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        else:
-            st.info("📊 Platform data unavailable")
-
-    with tab2:
-        # Count chain usage with tolerant extraction
-        chain_counts = {}
-        for _, row in df.iterrows():
-            # From chain
-            from_chain = row.get("from_chain") or row.get("from_blockchain")
-            if from_chain and isinstance(from_chain, str) and from_chain.strip():
-                chain_name = from_chain.strip()
-                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
-            
-            # To chain
-            to_chain = row.get("to_chain") or row.get("to_blockchain")
-            if to_chain and isinstance(to_chain, str) and to_chain.strip():
-                chain_name = to_chain.strip()
-                chain_counts[chain_name] = chain_counts.get(chain_name, 0) + 1
-        
-        if chain_counts:
-            # Create chain badges
-            badges_html = '<div class="chain-badges">'
-            for chain, count in sorted(chain_counts.items(), key=lambda x: x[1], reverse=True):
-                # First letter for icon
-                icon_letter = chain[0].upper() if chain else "?"
-                badges_html += f'''
-                <div class="chain-badge">
-                    <div class="chain-badge-icon">{icon_letter}</div>
-                    <div>
-                        <div class="chain-badge-name">{chain}</div>
-                        <div class="chain-badge-count">{count} interactions</div>
-                    </div>
-                </div>
-                '''
-            badges_html += '</div>'
-            
-            st.markdown(badges_html, unsafe_allow_html=True)
-        else:
-            st.info("📊 Chain data unavailable")
-
-    # --------- EXPORT SECTION ---------
-    st.markdown("### 📥 Data Export")
-    
-    st.markdown("""
-    <div class="glass-card">
-        <h4 style="margin: 0 0 1rem 0;">Download Complete Dataset</h4>
-        <p style="margin: 0; color: rgba(255,255,255,0.7); line-height: 1.6;">
-            Download the full CSV below — the detailed table is intentionally hidden on the page 
-            to maintain a clean, focused analytics view.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.download_button(
-        "📄 Download CSV Report",
-        df.to_csv(index=False).encode("utf-8"),
-        "jumper_analytics_report.csv",
-        "text/csv",
-        use_container_width=True
-    )
-
-else:
-    # --------- EMPTY STATE ---------
-    st.markdown("""
-    <div class="glass-card" style="text-align: center; padding: 3rem 2rem;">
-        <div style="font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.3;">🔗</div>
-        <h3 style="margin: 0 0 1rem 0; font-size: 1.5rem;">Ready to Analyze</h3>
-        <p style="margin: 0; color: rgba(255,255,255,0.6); max-width: 500px; margin: 0 auto; line-height: 1.8;">
-            Enter any EVM wallet address above to unlock comprehensive cross-chain analytics. 
-            Track bridges, swaps, and multi-chain activity with institutional-grade precision.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
